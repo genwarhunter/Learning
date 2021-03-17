@@ -19,10 +19,10 @@ def main():
         worker_pid = os.fork()
         if not worker_pid:
             now = time.time()
+            pause.until(now+iterations*i)
             for j in range(iterations):
                 with open(log_file, mode='a+') as file:
                     file.write(f'C {i}: {message} {j+1}\n')
-            pause.until(now+iterations*i)
             os.abort()
         workers.append(worker_pid)
 
