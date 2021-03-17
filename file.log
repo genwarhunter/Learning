@@ -38,3 +38,11 @@ C 3: test 7
 C 3: test 8
 C 3: test 9
 C 3: test 10
+C 0: message 1
+C 0: message 2
+C 1: message 1
+C 1: message 2
+C 0: message 1
+C 0: message 2
+C 1: message 1
+C 1: message 2
