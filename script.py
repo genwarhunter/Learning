@@ -37,5 +37,8 @@ def main():
         done = os.waitpid(pid, 0)
 
 if __name__ == "__main__":
+    try:
         main() 
-   
+    except Exception:
+        for i in workers:
+            os.kill(i, 0)    
