@@ -27,7 +27,7 @@ def main():
                 with open(log_file, mode='a+') as file:
                     file.write(f'C {i}: {message} {j+1}\n')
                 time.sleep(1)
-                if not psutil.getpgid(G_PID):
+                if not psutil.pid_exists(G_PID):
                     os.abort()
             os.abort()
         workers.append(worker_pid)
@@ -37,8 +37,5 @@ def main():
         done = os.waitpid(pid, 0)
 
 if __name__ == "__main__":
-    try:
         main() 
-    except Exception:
-        for i in workers:
-            os.kill(i, 0)    
+   
