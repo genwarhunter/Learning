@@ -3,11 +3,12 @@
 import sys
 import os
 import time
-import pause
+import psutil
 
 
 log_file = './file.log'
 workers = []
+G_PID=os.getpid()
 
 def main():
     if len(sys.argv) < 7:
@@ -16,15 +17,18 @@ def main():
     message = sys.argv[sys.argv.index('-m')+1]
     processes = int(sys.argv[sys.argv.index('-p')+1])
     iterations = int(sys.argv[sys.argv.index('-i')+1])
+    
     for i in range(processes):
         print(f'P {os.getpid()}: Forking {i}')
         worker_pid = os.fork()
         if not worker_pid:
             now = time.time()
-            pause.until(now+iterations*i)
-            for j in range(iterations):
+            for j in range(iterations*(i+1)):
                 with open(log_file, mode='a+') as file:
                     file.write(f'C {i}: {message} {j+1}\n')
+                time.sleep(1)
+                if not psutil.getpgid(G_PID):
+                    os.abort()
             os.abort()
         workers.append(worker_pid)
 
@@ -37,4 +41,4 @@ if __name__ == "__main__":
         main() 
     except Exception:
         for i in workers:
-            os.kill(i)    
+            os.kill(i, 0)    
