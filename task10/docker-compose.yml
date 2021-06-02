@@ -1,0 +1,26 @@
+version: "3.3"
+services:
+  envoy:
+    build: "."
+    networks:
+      - bridge-network
+      - macvlan-network
+  jaeger:
+    networks:
+      - bridge-network
+      - macvlan-network
+    image: jaegertracing/all-in-one
+    ports:
+      - "16686:16686"
+
+networks:
+  bridge-network:
+    driver: bridge
+  macvlan-network:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
